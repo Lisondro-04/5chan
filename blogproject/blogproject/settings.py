@@ -35,9 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages', #
-    'django.contrib.staticfiles',# js, css, img
-    'blogapp',# cada vez que se instala, se debe anexar a django
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'blogapp',
     'widget_tweaks',
 ]
 
@@ -51,10 +51,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'blogproject.urls'#verifica las url del proyecto
+ROOT_URLCONF = 'blogproject.urls'
 
 TEMPLATES = [
-    {#lee los archivos HTML
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['blogapp/templates/blogapp'],
         'APP_DIRS': True,
