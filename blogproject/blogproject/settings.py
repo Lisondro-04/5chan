@@ -74,7 +74,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ✅ Agregados para login/logout
-LOGIN_URL = '/login/'  # Redirección automática si no está autenticado
-LOGIN_REDIRECT_URL = '/'  # A dónde va después de hacer login
-LOGOUT_REDIRECT_URL = '/login/'  # A dónde va después de hacer logout
+# ✅ Configuraciones para login/logout
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = None  # Esto hace que Django busque logout.html al cerrar sesión
