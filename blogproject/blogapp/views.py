@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from .models import Blog, Review, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 
 
@@ -60,6 +60,16 @@ class CommentCreateView(CreateView):
     def get_success_url(self):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['blog_pk']})
 
+def user_signup(request):
+    if request.method  == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user) # automatic login after registration
+            return redirect('blogapp:blog_list') #redirection to the main page
+    else:
+            form = UserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})
 
 # User Views (Login & Logout)
 def user_login(request):
@@ -82,3 +92,4 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('login')  # Redirige a la página de login después de hacer logout
+
