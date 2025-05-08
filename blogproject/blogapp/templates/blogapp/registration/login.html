@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-
 {% block content %}
-<div class="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-  <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">Iniciar sesión</h2>
+<div class="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-[#1f1f1f] rounded border border-gray-400 dark:border-gray-600">
+  <h2 class="text-xl font-semibold mb-6 text-center">Iniciar sesión</h2>
   <form method="post" class="space-y-4">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+    <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded">
       Entrar
     </button>
   </form>
