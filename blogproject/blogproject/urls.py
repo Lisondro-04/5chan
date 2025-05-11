@@ -22,3 +22,8 @@ urlpatterns = [
     path('', include('blogapp.urls')),  # Tu app principal
     path('', include('django.contrib.auth.urls')),  # <- esto importa las vistas de login/logout
 ]
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

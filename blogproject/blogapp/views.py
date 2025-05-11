@@ -82,3 +82,28 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('login')  # Redirige a la página de login después de hacer logout
+
+from django.contrib.auth.decorators import login_required
+from .forms import UserProfileForm
+from .models import UserProfile
+from .models import Blog  # si aún no lo tienes importado
+
+@login_required
+def edit_profile(request):
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=profile)
+
+    return render(request, 'blogapp/edit_profile.html', {'form': form})
+
+@login_required
+def user_profile(request):
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    posts = Blog.objects.filter(author=request.user)
+    return render(request, 'blogapp/profile.html', {'profile': profile, 'posts': posts})

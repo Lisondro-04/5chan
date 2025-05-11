@@ -52,3 +52,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.commenter.username}"
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    display_name = models.CharField(max_length=100, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    banner = models.ImageField(upload_to='banners/', blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
