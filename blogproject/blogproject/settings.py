@@ -81,3 +81,4 @@ LOGOUT_REDIRECT_URL = None  # Esto hace que Django busque logout.html al cerrar 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+ 

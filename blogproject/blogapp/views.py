@@ -107,3 +107,4 @@ def user_profile(request):
     profile, _ = UserProfile.objects.get_or_create(user=request.user)
     posts = Blog.objects.filter(author=request.user)
     return render(request, 'blogapp/profile.html', {'profile': profile, 'posts': posts})
+ 
