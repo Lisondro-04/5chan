@@ -1,0 +1,27 @@
+{% extends 'blogapp/base.html' %}
+
+
+  <h2>Mi Perfil</h2>
+
+  <p><strong>Nombre de usuario:</strong> {{ request.user.username }}</p>
+  <p><strong>Nombre mostrado:</strong> {{ profile.display_name }}</p>
+
+  {% if profile.avatar %}
+    <img src="{{ profile.avatar.url }}" alt="Avatar" width="100">
+  {% endif %}
+
+  {% if profile.banner %}
+    <img src="{{ profile.banner.url }}" alt="Banner" width="300">
+  {% endif %}
+
+  <h3>Mis Publicaciones</h3>
+  <ul>
+    {% for post in posts %}
+      <li>{{ post.title }}</li>
+    {% empty %}
+      <li>No tienes publicaciones aún.</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'edit_profile' %}">Editar perfil</a>
+{% endblock %}
