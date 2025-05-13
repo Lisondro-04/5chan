@@ -8,9 +8,9 @@
     {{ blog.content|safe }}  
   </div>
 
-  <form method="post" class="space-y-4 transition-all duration-700 ease-in-out animate-fade-in">
+  <form method="post" class="space-y-4 transition-all duration-300 ease-in-out">
     {% csrf_token %}
-    <div class="space-y-2 transition-all duration-700 ease-in-out">
+    <div class="space-y-2 transition-all duration-300 ease-in-out">
       {% for field in form %}
         <div>
           <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">{{ field.label }}</label>

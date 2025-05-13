@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-  <div class="max-w-md mx-auto p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md">
-    <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Sign Up</h2>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Register</button>
-    </form>
-  </div>
+<div class="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-[#1f1f1f] rounded border border-gray-400 dark:border-gray-600">
+  <h2 class="text-xl font-bold mb-6 text-center">Registrarse</h2>
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded">
+      Registrarse
+    </button>
+  </form>
+</div>
 {% endblock %}

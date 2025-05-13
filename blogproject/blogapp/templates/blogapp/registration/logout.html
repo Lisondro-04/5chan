@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cerrando sesión - 5chan</title>
+  <title>Sesión cerrada - 5chan</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
-        extend: {}
-      },
-      plugins: []
+        extend: {
+          colors: {
+            retroGray: '#f0f0f0',
+            retroDark: '#1a1a1a'
+          }
+        }
+      }
     };
   </script>
 </head>
-<body class="bg-white dark:bg-black text-gray-900 dark:text-white font-sans flex items-center justify-center min-h-screen">
-
-  <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 max-w-sm w-full text-center">
-    <h1 class="text-3xl font-bold mb-4">¡Hasta luego!</h1>
-    <p class="text-xl mb-4">Has cerrado sesión con éxito.</p>
-    <a href="{% url 'login' %}" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-full transition-all duration-300">Iniciar sesión</a>
+<body class="bg-retroGray dark:bg-retroDark text-black dark:text-white font-sans flex items-center justify-center min-h-screen">
+  <div class="bg-white dark:bg-[#1f1f1f] border border-gray-400 dark:border-gray-600 rounded p-8 max-w-sm w-full text-center shadow-lg">
+    <h1 class="text-2xl font-bold mb-4">¡Hasta luego!</h1>
+    <p class="text-lg mb-6">Has cerrado sesión con éxito.</p>
+    <a href="{% url 'login' %}" class="bg-green-700 hover:bg-green-800 text-white py-2 px-6 rounded transition">Volver a iniciar sesión</a>
   </div>
-
 </body>
 </html>
+
