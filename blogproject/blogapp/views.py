@@ -1,12 +1,12 @@
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
-from .models import Blog, Review, Comment
+from .models import Blog, Review, Comment, Tag
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.models import User
 from django import forms
 
@@ -25,9 +25,20 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     fields = ['title', 'content']
     template_name = 'blog_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag_input'] = self.request.POST.get('tags', '')  # Para repoblar si hay error
+        return context
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        tags_str = self.request.POST.get('tags', '')  # <-- campo de texto desde el template
+        tag_names = [t.strip() for t in tags_str.split(',') if t.strip()]  # separar por comas y limpiar
+
+        for name in tag_names:
+            tag, created = Tag.objects.get_or_create(name=name)
+            self.object.tags.add(tag)  # self.object es el Blog recién creado
+        return response
 
     def get_success_url(self):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.object.pk})
@@ -72,6 +83,11 @@ def user_signup(request):
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+def tag_detail(request, tag_name):
+    tag = get_object_or_404(Tag, name=tag_name)
+    blogs = tag.blogs.all()
+    return render(request, 'blog/tag_detail.html', {'tag': tag, 'blogs': blogs})
+
 # User Login & Logout
 def user_login(request):
     if request.method == 'POST':
@@ -110,3 +126,7 @@ def profile_view(request):
     else:
         form = ProfileForm(instance=request.user)
     return render(request, 'blogapp/profile.html', {'form': form})
+
+def public_profile_view(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, 'blogapp/public_profile.html', {'user': user})

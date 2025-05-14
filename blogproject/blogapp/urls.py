@@ -18,4 +18,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),  # ✅ logout funcional
     path('signup/', user_signup, name='signup'),
     path('profile/', views.profile_view, name='profile'),
+    path('profile/<str:username>/', views.public_profile_view, name='public_profile'),
+    path('tag/<str:tag_name>/', views.tag_detail, name='tag_detail')
 ]

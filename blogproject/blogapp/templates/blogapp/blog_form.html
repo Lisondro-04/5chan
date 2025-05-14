@@ -20,6 +20,12 @@
           {% endif %}
         </div>
       {% endfor %}
+      <div>
+      <label for="tags" class="block text-sm font-semibold mb-1 text-gray-800 dark:text-yellow-100">Etiquetas (separadas por comas)</label>
+      <input type="text" name="tags" id="id_tags"
+            value="{{ tag_input|default:'' }}"
+            class="bg-yellow-50 dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-2 rounded-lg w-full border border-yellow-300 dark:border-yellow-700 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-yellow-400">
+    </div>
     </div>
     <button type="submit" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white dark:bg-yellow-500 dark:hover:bg-yellow-600 rounded font-bold transition-all duration-500 ease-in-out">Publicar Blog</button>
   </form>
