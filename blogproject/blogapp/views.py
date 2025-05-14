@@ -4,7 +4,11 @@ from .models import Blog, Review, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django import forms
 
 
 # Blog Views
@@ -12,11 +16,9 @@ class BlogListView(ListView):
     model = Blog
     template_name = 'blogapp/blog_list.html'
 
-
 class BlogDetailView(DetailView):
     model = Blog
     template_name = 'blogapp/blog_detail.html'
-
 
 class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
@@ -29,7 +31,6 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.object.pk})
-
 
 # Review Views
 class ReviewCreateView(CreateView):
@@ -45,7 +46,6 @@ class ReviewCreateView(CreateView):
     def get_success_url(self):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['pk']})
 
-
 # Comment Views
 class CommentCreateView(CreateView):
     model = Comment
@@ -60,18 +60,19 @@ class CommentCreateView(CreateView):
     def get_success_url(self):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['blog_pk']})
 
+# User Signup View
 def user_signup(request):
     if request.method  == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user) # automatic login after registration
-            return redirect('blogapp:blog_list') #redirection to the main page
+            login(request, user)
+            return redirect('blogapp:blog_list')
     else:
-            form = UserCreationForm()
+        form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-# User Views (Login & Logout)
+# User Login & Logout
 def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -81,15 +82,31 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('blogapp:blog_list')  # Redirigir al blog o página principal
+                return redirect('blogapp:blog_list')
         else:
             return render(request, 'login.html', {'form': form, 'error': 'Invalid credentials'})
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
-
 def user_logout(request):
     logout(request)
-    return redirect('login')  # Redirige a la página de login después de hacer logout
+    return redirect('login')
 
+# Profile View
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Perfil actualizado correctamente.')
+            return redirect('blogapp:profile')
+    else:
+        form = ProfileForm(instance=request.user)
+    return render(request, 'blogapp/profile.html', {'form': form})

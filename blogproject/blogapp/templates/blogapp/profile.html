@@ -1,27 +1,34 @@
-{% extends 'blogapp/base.html' %}
+{% extends 'base.html' %}
 
+{% block content %}
+<div class="container mx-auto px-4 py-10 max-w-2xl">
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">User Profile</h2>
 
-  <h2>Mi Perfil</h2>
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Username</label>
+                <input type="text" name="username" id="username"
+                       class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50"
+                       value="{{ form.username.value|default:user.username }}">
+            </div>
 
-  <p><strong>Nombre de usuario:</strong> {{ request.user.username }}</p>
-  <p><strong>Nombre mostrado:</strong> {{ profile.display_name }}</p>
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                <input type="email" name="email" id="email"
+                       class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50"
+                       value="{{ form.email.value|default:user.email }}">
+            </div>
 
-  {% if profile.avatar %}
-    <img src="{{ profile.avatar.url }}" alt="Avatar" width="100">
-  {% endif %}
-
-  {% if profile.banner %}
-    <img src="{{ profile.banner.url }}" alt="Banner" width="300">
-  {% endif %}
-
-  <h3>Mis Publicaciones</h3>
-  <ul>
-    {% for post in posts %}
-      <li>{{ post.title }}</li>
-    {% empty %}
-      <li>No tienes publicaciones aún.</li>
-    {% endfor %}
-  </ul>
-
-  <a href="{% url 'edit_profile' %}">Editar perfil</a>
+            <div class="flex justify-end">
+                <button type="submit"
+                        class="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition-colors shadow-md">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
+
