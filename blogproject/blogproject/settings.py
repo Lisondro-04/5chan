@@ -7,15 +7,24 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    # Apps de Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Apps del proyecto
     'blogapp',
     'widget_tweaks',
     'ckeditor',
+
+    # OAuth2 Toolkit
+    'oauth2_provider',
+
+    # Auditoría de modelos
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -26,6 +35,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # OAuth2 Token Middleware (para request.user vía token)
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
+
+    # Middleware de simple-history (guarda el usuario en cada cambio)
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'blogproject.urls'
@@ -34,8 +49,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'templates',  # Aquí es donde irá tu login.html y logout.html
-            BASE_DIR / 'blogapp' / 'templates' / 'blogapp',  # Tu app principal
+            BASE_DIR / 'templates',
+            BASE_DIR / 'blogapp' / 'templates' / 'blogapp',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -75,7 +90,13 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ✅ Configuraciones para login/logout
+# Login/Logout
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = None  # Esto hace que Django busque logout.html al cerrar sesión
+LOGOUT_REDIRECT_URL = None  # Django busca logout.html al cerrar sesión
+
+# OAuth2 Toolkit
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'oauth2_provider.backends.OAuth2Backend',
+)
