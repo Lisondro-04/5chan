@@ -4,7 +4,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-ukz72g)*267@$nvdk**+6#+a*nyzh_1t3o2=@wxtpga$cew)2^'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.50.236',
+    'local_host',
+    '127.0.0.1'
+]
 
 INSTALLED_APPS = [
     # Apps de Django
@@ -25,6 +29,7 @@ INSTALLED_APPS = [
 
     # Auditoría de modelos
     'simple_history',
+    'axes'
 ]
 
 MIDDLEWARE = [
@@ -33,6 +38,9 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+
+    #Middleware de Axes (monitorea los inicios de sesión fallidos y bloquea usuarios)
+    'axes.middleware.AxesMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
@@ -97,6 +105,13 @@ LOGOUT_REDIRECT_URL = None  # Django busca logout.html al cerrar sesión
 
 # OAuth2 Toolkit
 AUTHENTICATION_BACKENDS = (
+    'axes.backends.AxesBackend',
     'django.contrib.auth.backends.ModelBackend',
     'oauth2_provider.backends.OAuth2Backend',
 )
+
+#Configuración de Axes
+AXES_FAILURE_LIMIT = 5 #intentos previos al bloqueo
+AXES_COOLOFF_TIME = 0 #en horas (desbloqueo automático)
+AXES_RESET_ON_SUCCESS = True #Limpia intentos fallidos si el login fue exitoso
+AXES_LOOKOUT_TEMPLATE = 'axes/lockout.html' #vista de bloqueo

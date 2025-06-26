@@ -97,7 +97,7 @@ def user_login(request):
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return redirect('blogapp:blog_list')
         else:
             return render(request, 'login.html', {'form': form, 'error': 'Invalid credentials'})
