@@ -120,6 +120,6 @@ AUTHENTICATION_BACKENDS = (
 
 # Configuración de django-axes
 AXES_FAILURE_LIMIT = 5                    # Intentos fallidos antes del bloqueo
-AXES_COOLOFF_TIME = 0                     # Tiempo (en horas) hasta desbloqueo automático
+AXES_COOLOFF_TIME = 0                    # Tiempo (en horas) hasta desbloqueo automático
 AXES_RESET_ON_SUCCESS = True              # Restablecer el contador al iniciar sesión con éxito
 AXES_LOCKOUT_TEMPLATE = 'axes/lockout.html'  # Vista personalizada para bloqueo

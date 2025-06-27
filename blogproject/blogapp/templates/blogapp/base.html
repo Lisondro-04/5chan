@@ -297,7 +297,7 @@
       const closeBtn = document.getElementById('closeModal');
       const closeBtn2 = document.getElementById('closeModalBtn');
 
-      if (!localStorage.getItem('welcomeShown')) {
+      if (!sessionStorage.getItem('welcomeShown')) {
         popup.classList.remove('hidden');
         popup.classList.add('active');
       }
@@ -306,7 +306,7 @@
         popup.classList.remove('active');
         setTimeout(() => popup.classList.add('hidden'), 300);
         // Guardamos en localStorage que el popup ya se mostró para no mostrarlo más
-        localStorage.setItem('welcomeShown', 'true');
+        sessionStorage.setItem('welcomeShown', 'true');
       }
 
       closeBtn.addEventListener('click', closePopup);
