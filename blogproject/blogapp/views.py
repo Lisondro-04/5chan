@@ -53,19 +53,30 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.object.pk})
 
 
-# ✅ Review Views - corregido para evitar error
+# Review Views - corregido para evitar error y controlar duplicados
 class ReviewCreateView(LoginRequiredMixin, CreateView):
     model = Review
     fields = ['rating', 'comment']
     template_name = 'blogapp/review_form.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.blog = get_object_or_404(Blog, pk=self.kwargs['pk'])
+
+        # Evitar que el usuario publique más de una reseña en el mismo blog
+        if Review.objects.filter(blog=self.blog, reviewer=request.user).exists():
+            messages.warning(request, "Ya has dejado una reseña para este blog.")
+            return redirect('blogapp:blog_detail', pk=self.blog.pk)
+
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.reviewer = self.request.user
-        form.instance.blog = get_object_or_404(Blog, pk=self.kwargs['pk'])  # Asignación segura
+        form.instance.blog = self.blog  # asignación correcta
+        messages.success(self.request, "Tu reseña fue enviada con éxito.")
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.blog.pk})
 
 
 # Comment Views

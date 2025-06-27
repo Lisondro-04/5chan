@@ -214,6 +214,52 @@
       transform: scale(1.1) rotate(2deg);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     }
+
+    /* Estilos para el modal */
+    #popupModal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #popupModal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #popupContent {
+      background-color: white;
+      max-width: 400px;
+      width: 90%;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      position: relative;
+      color: #111827;
+    }
+
+    .dark #popupContent {
+      background-color: #1a1a1a;
+      color: #facc15;
+    }
+
+    #closeModal {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: inherit;
+      cursor: pointer;
+    }
   </style>
 
   <script>
@@ -245,6 +291,26 @@
       setTimeout(() => {
         document.getElementById('page-loader').style.display = 'none';
       }, 800);
+
+      // Mostrar el popup al cargar la página SOLO si no ha sido mostrado antes
+      const popup = document.getElementById('popupModal');
+      const closeBtn = document.getElementById('closeModal');
+      const closeBtn2 = document.getElementById('closeModalBtn');
+
+      if (!localStorage.getItem('welcomeShown')) {
+        popup.classList.remove('hidden');
+        popup.classList.add('active');
+      }
+
+      function closePopup() {
+        popup.classList.remove('active');
+        setTimeout(() => popup.classList.add('hidden'), 300);
+        // Guardamos en localStorage que el popup ya se mostró para no mostrarlo más
+        localStorage.setItem('welcomeShown', 'true');
+      }
+
+      closeBtn.addEventListener('click', closePopup);
+      closeBtn2.addEventListener('click', closePopup);
     });
 
     function toggleDarkMode() {
@@ -330,6 +396,21 @@
 
   <main class="pt-24 pb-16 px-4">
     <div class="max-w-4xl mx-auto content-wrapper fade-scroll">
+
+      {# Aquí mostramos los mensajes de Django para errores, alertas o confirmaciones #}
+      {% if messages %}
+        <div class="mb-6 px-4 py-3 rounded-md
+          {% if messages.0.tags == 'error' %}bg-red-600 text-white
+          {% elif messages.0.tags == 'success' %}bg-green-600 text-white
+          {% else %}bg-yellow-400 text-black{% endif %}">
+          <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
       {% block content %}{% endblock %}
     </div>
   </main>
@@ -345,5 +426,16 @@
   <footer>
     <p>&copy; 2025 5chan. Hecho por los inservibles.</p>
   </footer>
+
+  <!-- Pop-up modal -->
+  <div id="popupModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+    <div id="popupContent" class="bg-white dark:bg-darkpanel rounded-lg p-6 max-w-md mx-4 shadow-lg relative">
+      <button id="closeModal" class="absolute top-3 right-3 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white text-xl font-bold">&times;</button>
+      <h2 class="text-2xl font-bold mb-4">Bienvenido a 5chan</h2>
+      <p class="mb-4">Este es un mensaje importante o anuncio para los usuarios.</p>
+      <button id="closeModalBtn" class="glass-button btn-indigo px-4 py-2 rounded-full">Cerrar</button>
+    </div>
+  </div>
+
 </body>
 </html>
